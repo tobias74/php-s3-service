@@ -13,7 +13,7 @@ class S3Service
     $this->config = $config;
     
     $this->s3Client = new S3Client([
-        'region' => 'us-west-2',
+        'region' => $config['region'],
         'endpoint' => $config['endpoint'],
         'use_path_style_endpoint' => true,
         'credentials' => [
