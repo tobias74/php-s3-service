@@ -26,12 +26,12 @@ class S3Service
     $this->s3Client->registerStreamWrapper();
   }
 
-  public function createBucket($bucketName)
+  public function createYourBucket()
   {
     try 
     {
       $this->s3Client->createBucket([
-        'Bucket' => $bucketName,
+        'Bucket' => $this->config->bucket,
       ]);
       echo "Bucket seems to have been created...";
     }
