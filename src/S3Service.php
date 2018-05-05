@@ -31,7 +31,7 @@ class S3Service
     try 
     {
       $this->s3Client->createBucket([
-        'Bucket' => $this->config->bucket,
+        'Bucket' => $this->config['bucket'],
       ]);
       echo "Bucket seems to have been created...";
     }
@@ -90,6 +90,13 @@ class S3Service
     $presignedRequest = $this->s3Client->createPresignedRequest($command, $expiresIn);
     
     return (string) $presignedRequest->getUri();    
+  }
+  
+  public function getPaginator()
+  {
+    return $this->s3Client->getIterator('ListObjects', [
+        'Bucket' => $this->config['bucket']
+    ]);    
   }
 	
 }
