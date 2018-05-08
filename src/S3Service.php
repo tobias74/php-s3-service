@@ -10,7 +10,9 @@ class S3Service
   
   public function __construct($config)
   {
-    $this->config = $config;
+    $this->config = array_merge(array(
+      'defaultExpiresIn' => '+7 days'    
+    ),$config);
     
     $this->s3Client = new S3Client([
         'region' => $config['region'],
@@ -75,9 +77,9 @@ class S3Service
     return 's3://' . $this->config['bucket']. '/' . $key;    
   }
   
-  public function getExternalUrl($key)
+  public function getExternalUri($key)
   {
-    return $this->s3Client->getObjectUrl($this->config['bucket'], $key);
+    return $this->getPresignedUrl($key, $this->config['defaultExpiresIn']);
   }
   
   public function getPresignedUrl($key, $expiresIn='+10 minutes')
