@@ -115,6 +115,30 @@ class S3Service
         return (string) $presignedRequest->getUri();
     }
 
+    public function createPresignedGetUrl($key, $expiresIn = '+20 minutes', $options = [])
+    {
+        $command = $this->s3Client->getCommand('GetObject', [
+            'Bucket' => $this->config['bucket'],
+            'Key' => $key,
+        ]);
+
+        $presignedRequest = $this->s3Client->createPresignedRequest($command, $expiresIn, $options);
+
+        return (string) $presignedRequest->getUri();
+    }
+
+    public function createPresignedPutUrl($key, $expiresIn = '+20 minutes')
+    {
+        $command = $this->s3Client->getCommand('PutObject', [
+            'Bucket' => $this->config['bucket'],
+            'Key' => $key,
+        ]);
+
+        $presignedRequest = $this->s3Client->createPresignedRequest($command, $expiresIn);
+
+        return (string) $presignedRequest->getUri();
+    }
+    
     public function createMultipartUpload($key)
     {
         return $this->s3Client->createMultipartUpload([
