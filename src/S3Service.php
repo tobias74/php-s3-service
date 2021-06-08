@@ -15,15 +15,15 @@ class S3Service
         ), $config);
 
         $this->s3Client = new S3Client([
-        'region' => $config['region'],
-        'endpoint' => $config['endpoint'],
-        'use_path_style_endpoint' => true,
-        'credentials' => [
-            'key' => $config['key'],
-            'secret' => $config['secret'],
-        ],
-        'version' => 'latest',
-    ]);
+            'region' => $config['region'],
+            'endpoint' => $config['endpoint'],
+            'use_path_style_endpoint' => true,
+            'credentials' => [
+                'key' => $config['key'],
+                'secret' => $config['secret'],
+            ],
+            'version' => 'latest',
+        ]);
 
         $this->s3Client->registerStreamWrapper();
     }
@@ -85,10 +85,10 @@ class S3Service
     public function getStream($key)
     {
         $context = stream_context_create(array(
-        's3' => array(
-            'seekable' => true,
-        ),
-    ));
+            's3' => array(
+                'seekable' => true,
+            ),
+        ));
 
         return fopen('s3://'.$this->config['bucket'].'/'.$key, 'r', false, $context);
     }
@@ -181,7 +181,12 @@ class S3Service
     public function getPaginator()
     {
         return $this->s3Client->getIterator('ListObjects', [
-        'Bucket' => $this->config['bucket'],
-    ]);
+            'Bucket' => $this->config['bucket'],
+        ]);
+    }
+    
+    public function doesObjectExist($key)
+    {
+        return $this->s3Client->doesObjectExist($this->config['bucket'], $key);
     }
 }
